@@ -25,6 +25,60 @@ python3 src/design.py
 
 The data repo (`wmt-conference/wmt24-news-systems`) states no license, so no source or translation text is committed here: only code, ids, counts and derived numbers. No LLM has been called.
 
+## Background: the data and the literature
+
+### Where the data come from
+
+| | |
+|---|---|
+| Event | WMT24, the Ninth Conference on Machine Translation, November 2024. Its general translation task asks teams to submit translation systems, then has people review the output |
+| What was collected | Translations of the same English passages (news, literary, social media, speech) by 10-15 machine systems per language plus a human reference, each reviewed by paid bilingual reviewers (professional translators in most languages; linguists, researchers and students for Czech) |
+| Why it was collected | To rank translation systems against each other and against human translators |
+| Where it is | [github.com/wmt-conference/wmt24-news-systems](https://github.com/wmt-conference/wmt24-news-systems), pinned here at commit `fabe1f8`. The repo states no license |
+| Paper that describes it | Kocmi et al. 2024a, section 6 and appendix B |
+
+### How this project uses the data differently
+
+The organisers collected the reviews to answer "which translation system is best?". This project reuses the same reviews to answer a different question: **how far can an LLM be trusted to judge translations, measured against those human reviews, language by language?**
+
+That reuse has consequences, because the collection was not designed for it:
+
+| Design choice made for ranking systems | What it means for judging a judge |
+|---|---|
+| Most translations were reviewed once | No way to tell a reviewer's strictness from a translation's quality in four of the eight languages |
+| Reviewers were assigned by passage, and Spanish was split between two vendors | Labels in Spanish depend on which vendor reviewed the passage (finding 4) |
+| Speech reviewers watched the video | A text-only judge sees less than the reviewer did (finding 5) |
+
+### What ESA is, and how it differs from MQM
+
+Both are ways for a person to review a translation by marking the errors in it.
+
+| | MQM (Multidimensional Quality Metrics) | ESA (Error Span Annotation) |
+|---|---|---|
+| Introduced | Lommel et al. 2014; adapted for machine translation research by Freitag et al. 2021 | Kocmi et al. 2024b; first used as WMT's main human review method in 2024 |
+| What the reviewer marks | Each error span, its category (for example mistranslation, omission, grammar) and its severity (minor, major, sometimes critical) | Each error span and its severity (minor or major). No category |
+| Where the score comes from | Computed from the errors with fixed weights (Freitag et al. 2021: minor 1, major 5, non-translation 25) | Given directly by the reviewer, 0-100, after marking the errors |
+| Who reviews | Reviewers trained in the error typology | In WMT24: "professional translators but not experts in MQM/ESA-style annotations" (Kocmi et al. 2024a) |
+| Cost | Slower and more expensive per translation | Designed to be cheaper: Kocmi et al. 2024a report it was more efficient to collect than MQM |
+| In WMT24 | English→German and Japanese→Chinese in the general task; the metrics task also released English→Spanish MQM reviews (Freitag et al. 2024) | The eight English→X languages studied here, plus Czech→Ukrainian |
+
+ESA sits between two older methods: giving one overall score with no error marking (direct assessment, Graham et al. 2013) and full MQM. The judge in this project marks errors the MQM way (with categories) because its instructions are carried over unchanged from an earlier project on the English→Spanish MQM data; it is then compared with ESA reviews at the level both share, whether a translation has no error, minor errors only, or a major error.
+
+### Literature
+
+| Topic | Reference | Link |
+|---|---|---|
+| The dataset | Kocmi et al. 2024a. Findings of the WMT24 General Machine Translation Shared Task: The LLM Era Is Here but MT Is Not Solved Yet. WMT 2024 | [aclanthology.org/2024.wmt-1.1](https://aclanthology.org/2024.wmt-1.1/) |
+| ESA | Kocmi et al. 2024b. Error Span Annotation: A Balanced Approach for Human Evaluation of Machine Translation. WMT 2024 | [aclanthology.org/2024.wmt-1.131](https://aclanthology.org/2024.wmt-1.131/) |
+| MQM, original framework | Lommel, Uszkoreit, Burchardt 2014. Multidimensional Quality Metrics (MQM): A Framework for Declaring and Describing Translation Quality Metrics. Tradumàtica 12 | Cited as in Kocmi et al. 2024a; not read for this project |
+| MQM for machine translation | Freitag et al. 2021. Experts, Errors, and Context: A Large-Scale Study of Human Evaluation for Machine Translation. TACL | [aclanthology.org/2021.tacl-1.87](https://aclanthology.org/2021.tacl-1.87/) |
+| MQM reviews in WMT24 | Freitag et al. 2024. Are LLMs Breaking MT Metrics? Results of the WMT24 Metrics Shared Task. WMT 2024 | [aclanthology.org/2024.wmt-1.2](https://aclanthology.org/2024.wmt-1.2/) |
+| Direct assessment | Graham et al. 2013. Continuous Measurement Scales in Human Evaluation of Machine Translation | [aclanthology.org/W13-2305](https://aclanthology.org/W13-2305/) |
+| An LLM marking MQM errors | Kocmi and Federmann 2023. GEMBA-MQM: Detecting Translation Quality Error Spans with GPT-4. WMT 2023 | [aclanthology.org/2023.wmt-1.64](https://aclanthology.org/2023.wmt-1.64/) |
+| Clearing with a guarantee | Jung, Brahman, Choi 2024. Trust or Escalate: LLM Judges with Provable Guarantees for Human Agreement | [arxiv.org/abs/2407.18370](https://arxiv.org/abs/2407.18370) |
+| The statistics behind the guarantee | Angelopoulos et al. 2021. Learn then Test: Calibrating Predictive Algorithms to Achieve Risk Control | [arxiv.org/abs/2110.01052](https://arxiv.org/abs/2110.01052) |
+| Reviewer agreement | Krippendorff 2004. Content Analysis: An Introduction to Its Methodology, 2nd ed. | Book; source of alpha and the 0.667 floor |
+
 ## Findings so far
 
 Counted from the public files, not taken from the paper. Detail and method are in [REPORT.md](REPORT.md).
