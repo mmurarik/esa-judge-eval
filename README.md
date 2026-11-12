@@ -62,7 +62,7 @@ Both are ways for a person to review a translation by marking the errors in it.
 | Cost | Slower and more expensive per translation | Designed to be cheaper: Kocmi et al. 2024a report it was more efficient to collect than MQM |
 | In WMT24 | English→German and Japanese→Chinese in the general task; the metrics task also released English→Spanish MQM reviews (Freitag et al. 2024) | The eight English→X languages studied here, plus Czech→Ukrainian |
 
-ESA sits between two older methods: giving one overall score with no error marking (direct assessment, Graham et al. 2013) and full MQM. The judge in this project marks errors the MQM way (with categories) because its instructions are carried over unchanged from an earlier project on the English→Spanish MQM data; it is then compared with ESA reviews at the level both share, whether a translation has no error, minor errors only, or a major error.
+ESA sits between two older methods: giving one overall score with no error marking (direct assessment, Graham et al. 2013) and full MQM. The judge in this project marks errors the MQM way (with categories) because its instructions are carried over unchanged from an earlier project on the English→Spanish MQM data ([mqm-judge-eval](https://github.com/mmurarik/mqm-judge-eval)); it is then compared with ESA reviews at the level both share, whether a translation has no error, minor errors only, or a major error.
 
 ### Literature
 
@@ -106,7 +106,7 @@ Proposal only; nothing below has been run. Detail and the basis for each choice 
 | Guarantee | Miss rate at most 10%, with 95% confidence; 5% reported as a stretch line | Exact binomial limit. 5% needs 59 confirmed majors with zero misses in the calibration set; Japanese has 36 |
 | Splits | Development / calibration / test, split by source passage | No passage appears on both sides, so the test is not leaked |
 | Speech | Separate test-only arm, outside the guarantee | Finding 5 |
-| Judge | Claude Opus 5.5, medium effort, instructions frozen from the first project; only language and locale wording change | Keeps the two projects comparable |
+| Judge | Claude Opus 5.5, medium effort, instructions frozen from the first project ([mqm-judge-eval](https://github.com/mmurarik/mqm-judge-eval)); only language and locale wording change | Keeps the two projects comparable |
 
 Steps, in order:
 
