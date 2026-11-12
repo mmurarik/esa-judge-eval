@@ -16,18 +16,8 @@ ORDER = list(load.NAMES)
 md = []
 
 
-def to_md(df):
-    def cell(v):
-        if isinstance(v, float):
-            return "" if np.isnan(v) else (f"{v:,.0f}" if v == int(v) and abs(v) >= 1000 else f"{v:g}")
-        return f"{v:,}" if isinstance(v, (int, np.integer)) else str(v)
-    head = "| " + " | ".join(str(c).strip() for c in df.columns) + " |"
-    sep = "|" + "|".join("---" if df[c].dtype == object else "---:" for c in df.columns) + "|"
-    return "\n".join([head, sep] + ["| " + " | ".join(cell(v) for v in r) + " |" for r in df.itertuples(index=False)])
-
-
 def emit(title, df, note=""):
-    md.append(f"### {title}\n\n{to_md(df)}\n" + (f"\n{note}\n" if note else ""))
+    md.append(f"### {title}\n\n{stats.to_md(df)}\n" + (f"\n{note}\n" if note else ""))
 
 
 def pct(x):

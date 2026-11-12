@@ -1,5 +1,6 @@
 """Small statistics helpers. Each choice is justified where it is used in REPORT.md / DESIGN.md."""
 import numpy as np
+import pandas as pd
 from scipy import stats as st
 
 
@@ -57,3 +58,13 @@ def cp(k, n, conf=0.95):
 def cp_upper(k, n, conf=0.95):
     """One-sided exact binomial upper bound."""
     return 1.0 if k == n else st.beta.ppf(conf, k + 1, n - k)
+
+
+def to_md(df):
+    def cell(v):
+        if isinstance(v, float):
+            return "" if np.isnan(v) else (f"{v:,.0f}" if v == int(v) and abs(v) >= 1000 else f"{v:g}")
+        return f"{v:,}" if isinstance(v, (int, np.integer)) else str(v)
+    head = "| " + " | ".join(str(c).strip() for c in df.columns) + " |"
+    sep = "|" + "|".join("---" if df[c].dtype == object else "---:" for c in df.columns) + "|"
+    return "\n".join([head, sep] + ["| " + " | ".join(cell(v) for v in r) + " |" for r in df.itertuples(index=False)])
