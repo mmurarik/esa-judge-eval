@@ -1,0 +1,96 @@
+lang,Language,Vendor,Reviewer,Reviews,Documents,Flagged %,Flagged % low,Flagged % high,Major %,"Flagged %, no speech",Mean score,"Same translations, other reviewer: n","Same translations, other reviewer: flagged %",Own flagged % on those
+cs,Czech,Charles Univ.,Annotator07ufal,1555,134,20.9,17.6,24.4,4.6,16.3,91.1,1075,45.5,20.4
+cs,Czech,Charles Univ.,Annotator08ufal,1468,118,44.3,39.6,49.7,18.5,37.6,90.8,991,45.7,45.0
+cs,Czech,Charles Univ.,Annotator09ufal,1371,147,63.0,58.5,67.5,19.0,58.5,70.8,620,41.1,67.1
+cs,Czech,Charles Univ.,Annotator11ufal,1260,157,20.3,16.8,24.1,6.3,16.7,88.3,600,44.8,20.0
+cs,Czech,Charles Univ.,Annotator12ufal,1261,150,48.0,43.2,52.9,6.0,43.9,84.3,866,40.6,49.5
+cs,Czech,Charles Univ.,Annotator13ufal,1211,145,36.2,30.6,42.1,20.5,31.4,77.7,651,46.4,35.9
+cs,Czech,Charles Univ.,Annotator14ufal,798,116,35.7,29.4,42.2,14.5,28.9,93.7,505,40.8,33.5
+cs,Czech,Charles Univ.,Annotator15ufal,747,124,60.0,54.3,65.6,28.2,56.6,83.2,334,41.3,61.7
+cs,Czech,Charles Univ.,Annotator16ufal,709,132,31.3,26.4,36.5,8.0,28.2,92.6,411,36.3,29.9
+cs,Czech,Charles Univ.,Annotator18ufal,602,90,48.2,42.6,54.6,20.3,45.5,90.3,358,41.3,50.0
+cs,Czech,Charles Univ.,Annotator21ufal,578,94,41.2,35.1,48.9,26.5,36.9,83.2,393,39.9,36.1
+cs,Czech,Charles Univ.,Annotator22ufal,496,90,67.1,62.6,71.9,42.1,64.6,85.6,267,36.7,69.3
+cs,Czech,Charles Univ.,Annotator24ufal,444,76,77.0,71.1,83.1,27.9,72.1,73.4,306,37.6,80.1
+cs,Czech,Charles Univ.,Annotator25ufal,441,84,27.4,21.4,34.4,6.6,24.4,97.1,291,46.4,26.1
+cs,Czech,Charles Univ.,Annotator26ufal,303,65,41.3,34.7,47.8,13.9,38.4,92.9,171,42.7,38.0
+cs,Czech,Charles Univ.,Annotator27ufal,206,47,55.3,44.4,66.0,26.2,54.2,87.2,113,18.6,50.4
+cs,Czech,Charles Univ.,Annotator29ufal,141,32,81.6,73.6,90.2,50.4,77.6,83.7,71,40.8,81.7
+cs,Czech,Charles Univ.,Annotator32ufal,76,18,51.3,40.0,69.4,15.8,44.4,91.5,55,41.8,54.5
+cs,Czech,Charles Univ.,Annotator33ufal,71,15,46.5,32.1,65.0,29.6,41.3,87.0,48,12.5,39.6
+es,Spanish,Microsoft,Annotator01microsoft,242,46,25.6,20.4,34.6,10.7,18.5,93.2,0,,
+es,Spanish,Microsoft,Annotator02microsoft,277,47,16.6,11.7,22.7,4.7,13.4,91.6,0,,
+es,Spanish,Microsoft,Annotator03microsoft,463,67,7.8,4.2,12.5,3.5,3.1,95.9,0,,
+es,Spanish,Microsoft,Annotator04microsoft,491,66,18.5,15.2,22.4,3.9,15.9,83.4,0,,
+es,Spanish,Microsoft,Annotator05microsoft,542,71,12.2,8.7,16.4,4.2,10.6,87.0,0,,
+es,Spanish,Microsoft,Annotator06microsoft,686,73,12.1,7.9,16.9,5.2,9.7,96.6,0,,
+es,Spanish,Microsoft,Annotator07microsoft,313,60,16.3,10.9,22.4,1.6,14.9,99.3,0,,
+es,Spanish,Microsoft,Annotator08microsoft,371,59,11.9,7.6,17.4,5.1,8.5,96.2,0,,
+es,Spanish,Microsoft,Annotator09microsoft,346,59,27.2,21.0,35.4,4.6,20.3,93.1,0,,
+es,Spanish,Microsoft,Annotator10microsoft,69,19,29.0,14.7,43.2,10.1,30.4,94.3,0,,
+es,Spanish,Microsoft,Annotator11microsoft,61,20,11.5,1.6,22.2,4.9,10.6,87.3,0,,
+es,Spanish,Microsoft,Annotator12microsoft,327,58,12.2,7.5,17.5,2.1,12.3,97.0,0,,
+es,Spanish,Toloka,Annotator16toloka,1911,85,83.4,80.0,87.0,42.5,79.2,79.0,0,,
+es,Spanish,Toloka,Annotator17toloka,1509,84,43.7,38.9,49.8,27.1,39.5,87.9,0,,
+hi,Hindi,Microsoft,Annotator13microsoft,227,42,42.7,33.9,53.2,7.0,39.0,87.8,133,37.6,50.4
+hi,Hindi,Microsoft,Annotator14microsoft,605,115,9.6,6.4,13.8,1.7,10.8,88.6,348,37.6,8.3
+hi,Hindi,Microsoft,Annotator15microsoft,745,128,34.8,29.8,40.9,12.1,27.2,93.6,441,37.0,34.2
+hi,Hindi,Microsoft,Annotator16microsoft,612,105,10.6,6.9,15.1,9.3,9.6,85.4,381,41.2,9.4
+hi,Hindi,Microsoft,Annotator17microsoft,857,129,13.1,10.0,16.2,2.0,11.5,93.7,410,36.1,13.4
+hi,Hindi,Microsoft,Annotator18microsoft,641,131,56.5,51.2,62.2,25.3,50.5,79.2,375,31.7,54.7
+hi,Hindi,Microsoft,Annotator19microsoft,707,117,51.5,44.9,58.6,13.0,54.7,85.4,504,34.7,54.6
+hi,Hindi,Microsoft,Annotator20microsoft,822,132,44.3,38.9,49.9,17.4,42.4,87.5,447,33.6,50.1
+hi,Hindi,Microsoft,Annotator21microsoft,139,31,15.8,7.4,25.0,4.3,16.7,91.5,60,25.0,13.3
+hi,Hindi,Microsoft,Annotator22microsoft,806,115,33.5,28.1,40.0,23.1,27.1,92.8,525,35.2,30.1
+hi,Hindi,Microsoft,Annotator23microsoft,808,119,41.6,35.4,48.1,15.3,36.5,91.0,442,39.6,46.4
+hi,Hindi,Microsoft,Annotator24microsoft,848,123,36.7,31.8,42.5,20.0,32.8,84.9,496,37.1,38.5
+hi,Hindi,Microsoft,Annotator25microsoft,433,89,41.3,33.2,49.3,15.9,40.8,72.7,253,39.5,44.3
+hi,Hindi,Microsoft,Annotator26microsoft,355,93,40.8,30.5,53.6,16.6,33.2,85.9,201,32.3,47.3
+hi,Hindi,Microsoft,Annotator27microsoft,705,121,38.4,31.7,45.4,10.8,36.5,82.1,412,37.1,38.6
+is,Icelandic,Arni Magnusson Inst.,Annotator01isl,1570,159,82.0,78.6,85.3,49.1,78.3,71.9,0,,
+is,Icelandic,Arni Magnusson Inst.,Annotator02isl,1582,158,82.8,78.9,86.7,42.0,80.3,81.6,0,,
+is,Icelandic,Arni Magnusson Inst.,Annotator03isl,1585,162,73.4,68.8,77.8,39.9,69.4,62.6,0,,
+is,Icelandic,Arni Magnusson Inst.,Annotator04isl,1603,163,76.0,71.8,80.8,42.4,72.3,64.4,0,,
+ja,Japanese,Microsoft,Annotator28microsoft,1611,160,12.2,9.5,15.0,8.5,10.8,95.2,1489,16.5,12.6
+ja,Japanese,Microsoft,Annotator29microsoft,68,16,5.9,0.0,16.4,0.0,5.2,77.7,68,19.1,5.9
+ja,Japanese,Microsoft,Annotator30microsoft,1192,146,12.8,10.3,15.7,6.2,11.5,90.2,1078,19.2,12.6
+ja,Japanese,Microsoft,Annotator31microsoft,1098,150,56.5,52.0,61.5,24.3,51.1,90.9,1032,15.3,57.9
+ja,Japanese,Microsoft,Annotator32microsoft,956,139,19.8,16.1,24.7,4.2,14.3,91.7,822,18.9,21.2
+ja,Japanese,Microsoft,Annotator33microsoft,1347,157,20.6,17.1,24.5,4.6,20.3,97.1,1285,18.7,20.8
+ja,Japanese,Microsoft,Annotator34microsoft,1454,153,9.1,7.0,11.8,4.1,5.9,91.5,1324,18.0,9.9
+ja,Japanese,Microsoft,Annotator35microsoft,1178,147,25.5,22.0,29.6,1.9,19.8,80.5,1042,21.6,25.4
+ja,Japanese,Microsoft,Annotator36microsoft,1291,155,3.4,2.2,4.7,1.4,2.7,83.0,1173,20.7,3.2
+ja,Japanese,Microsoft,Annotator37microsoft,1384,148,18.7,15.5,22.3,9.0,15.0,86.2,1246,17.3,18.2
+ja,Japanese,Microsoft,Annotator38microsoft,683,78,2.6,1.4,4.3,0.7,1.2,84.3,683,19.8,2.6
+ja,Japanese,Microsoft,Annotator39microsoft,1301,151,19.2,15.9,22.5,1.6,19.6,84.3,1219,18.6,19.9
+ja,Japanese,Microsoft,Annotator40microsoft,1114,139,16.4,13.3,19.9,6.7,10.5,93.2,1066,19.5,16.7
+ja,Japanese,Microsoft,Annotator41microsoft,539,88,24.1,18.5,30.4,17.4,18.6,84.7,479,16.3,25.7
+ru,Russian,Toloka,Annotator01toloka,1039,127,59.7,54.8,64.7,22.3,55.7,82.2,0,,
+ru,Russian,Toloka,Annotator02toloka,2600,162,43.5,39.6,47.7,23.5,38.1,87.2,0,,
+ru,Russian,Toloka,Annotator03toloka,1610,140,54.1,49.1,59.5,14.2,49.9,77.0,0,,
+ru,Russian,Toloka,Annotator04toloka,794,140,43.8,38.0,49.7,18.3,40.0,80.6,0,,
+ru,Russian,Toloka,Annotator05toloka,1034,85,48.8,43.4,55.8,25.7,44.8,81.1,0,,
+ru,Russian,Toloka,Annotator06toloka,80,25,72.5,59.8,88.1,22.5,68.9,76.9,0,,
+ru,Russian,Toloka,Annotator07toloka,1085,85,22.9,18.1,28.7,21.2,16.5,87.0,0,,
+uk,Ukrainian,Toloka,Annotator08toloka,2278,168,22.9,19.6,26.7,20.4,18.8,86.6,0,,
+uk,Ukrainian,Toloka,Annotator09toloka,513,80,18.1,14.1,23.4,10.5,14.1,95.4,0,,
+uk,Ukrainian,Toloka,Annotator10toloka,1709,166,44.4,40.6,48.7,18.1,39.1,81.4,0,,
+uk,Ukrainian,Toloka,Annotator11toloka,857,123,50.6,45.0,56.4,27.4,47.9,72.8,0,,
+uk,Ukrainian,Toloka,Annotator12toloka,367,61,34.1,28.0,40.9,19.3,32.6,91.4,0,,
+uk,Ukrainian,Toloka,Annotator13toloka,71,12,31.0,19.3,47.2,15.5,25.8,81.8,0,,
+uk,Ukrainian,Toloka,Annotator14toloka,471,67,32.3,27.5,37.4,16.6,30.7,86.5,0,,
+uk,Ukrainian,Toloka,Annotator15toloka,74,18,31.1,13.7,48.8,16.2,33.3,87.3,0,,
+zh,Chinese,Microsoft,Annotator39microsoft,1132,138,14.3,11.4,17.4,0.9,13.5,86.8,1046,20.5,14.3
+zh,Chinese,Microsoft,Annotator41microsoft,1627,161,19.1,16.2,22.7,14.5,13.6,87.8,1391,20.8,19.3
+zh,Chinese,Microsoft,Annotator42microsoft,791,118,21.9,18.2,26.3,12.5,20.0,89.5,729,21.4,22.2
+zh,Chinese,Microsoft,Annotator43microsoft,585,90,30.1,25.0,36.3,5.5,27.4,90.2,581,20.8,29.8
+zh,Chinese,Microsoft,Annotator44microsoft,1810,167,10.2,8.0,13.1,4.0,8.1,77.1,1610,22.5,9.4
+zh,Chinese,Microsoft,Annotator45microsoft,1886,163,30.6,27.0,34.5,26.5,25.6,77.3,1558,19.9,29.9
+zh,Chinese,Microsoft,Annotator46microsoft,1656,156,57.7,53.0,62.9,20.9,54.2,91.0,1414,14.5,58.1
+zh,Chinese,Microsoft,Annotator47microsoft,1668,160,14.8,12.0,17.8,2.9,12.7,90.7,1564,22.5,14.7
+zh,Chinese,Microsoft,Annotator48microsoft,1751,158,11.2,9.1,13.5,3.1,9.2,95.8,1503,20.6,11.4
+zh,Chinese,Microsoft,Annotator49microsoft,1645,163,2.8,1.7,4.0,0.7,2.1,93.1,1511,22.2,2.6
+zh,Chinese,Microsoft,Annotator50microsoft,160,39,16.9,11.4,25.8,11.2,11.4,83.8,160,31.2,16.9
+zh,Chinese,Microsoft,Annotator51microsoft,373,59,26.3,19.5,34.9,4.6,24.1,89.4,373,25.5,26.3
+zh,Chinese,Microsoft,Annotator52microsoft,71,15,36.6,25.8,49.1,16.9,34.9,88.0,71,25.4,36.6
+zh,Chinese,Microsoft,Annotator53microsoft,61,14,73.8,57.1,91.3,18.0,71.2,74.1,61,16.4,73.8

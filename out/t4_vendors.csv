@@ -1,0 +1,10 @@
+Language,Vendor,Reviewers,Reviews,Flagged %,95% range,Major %,Reviewer flagged %: lowest,median,highest,Reviewers with 100+ reviews,Share of reviews by the 2 busiest %
+Czech,Charles Univ.,19,13738,42.5,39.7-45.8,16.2,20.3,44.3,81.6,17,22.0
+Spanish,Microsoft,12,4188,15.3,13.4-17.6,4.5,7.8,14.25,27.2,10,29.3
+Spanish,Toloka,2,3420,65.9,61.8-70.1,35.7,43.7,63.550000000000004,83.4,2,100.0
+Hindi,Microsoft,15,9310,34.5,32.4-36.9,13.7,9.6,38.4,56.5,15,18.3
+Icelandic,Arni Magnusson Inst.,4,6340,78.5,75.8-81.6,43.3,73.4,79.0,82.8,4,50.3
+Japanese,Microsoft,14,15216,18.1,16.6-19.9,6.6,2.6,18.7,56.5,13,20.1
+Russian,Toloka,7,8242,45.9,43.1-49.2,21.0,22.9,46.3,59.7,6,51.1
+Ukrainian,Toloka,8,6340,33.6,30.8-36.7,19.5,18.1,33.2,50.6,6,62.9
+Chinese,Microsoft,14,15216,21.2,19.4-23.3,9.6,2.8,18.0,57.7,12,24.3
