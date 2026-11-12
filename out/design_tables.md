@@ -60,22 +60,30 @@
 
 Split: 20 dev passages; the rest 60% calibration / 40% test, stratified by text type and by whether the passage has a major-error translation. Seeded; ids in ids/split_<lang>.csv.
 
-### D6. Judge calls and API cost (Claude Opus 5.5 at $4 input / $20 output per million tokens, standard API)
+### D6. Judge calls and API cost without caching (Claude Opus 5.5 at $4 input / $20 output per million tokens)
 
-| Language | Dev | Calibration (majors) | Test majors | Test clean | Test other | Speech arm (test only) | Calls | Input tokens per call (est.) | Cost, expected $ | Cost, high $ |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Czech | 60 | 87 | 48 | 200 | 150 | 146 | 691 | 3,220 | 15.12 | 24.41 |
-| Hindi | 60 | 64 | 37 | 200 | 150 | 123 | 634 | 4,020 | 15.9 | 25.44 |
-| Japanese | 60 | 36 | 25 | 200 | 150 | 109 | 580 | 3,430 | 13.18 | 21.22 |
-| Chinese | 60 | 59 | 37 | 200 | 150 | 122 | 628 | 3,250 | 13.82 | 22.29 |
-| Spanish | 60 | 65 | 38 | 200 | 96 | 0 | 459 | 3,210 | 10.02 | 16.18 |
-| Icelandic | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 3,390 | 16.02 | 25.8 |
-| Russian | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 3,540 | 16.44 | 26.44 |
-| Ukrainian | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 3,590 | 16.59 | 26.65 |
-| Total | 480 | 761 | 635 | 1,600 | 1,146 | 500 | 5,122 |  | 117.09 | 188.43 |
+| Language | Dev | Calibration (majors) | Test majors | Test clean | Test other | Speech arm (test only) | Calls | Fixed tokens per call | Variable tokens per call (est.) | Standard, expected $ | Standard, high $ | Batch, expected $ | Batch, high $ |
+|---|---:|---:|---:|---:|---:|---:|---:|---|---|---:|---:|---:|---:|
+| Czech | 60 | 87 | 48 | 200 | 150 | 146 | 691 | 2,063 | 1,300 | 15.51 | 22.72 | 7.76 | 11.36 |
+| Hindi | 60 | 64 | 37 | 200 | 150 | 123 | 634 | 2,063 | 2,110 | 16.29 | 23.93 | 8.14 | 11.96 |
+| Japanese | 60 | 36 | 25 | 200 | 150 | 109 | 580 | 2,063 | 1,520 | 13.53 | 19.83 | 6.77 | 9.92 |
+| Chinese | 60 | 59 | 37 | 200 | 150 | 122 | 628 | 2,063 | 1,330 | 14.18 | 20.76 | 7.09 | 10.38 |
+| Spanish | 60 | 65 | 38 | 200 | 96 | 0 | 459 | 2,063 | 1,290 | 10.29 | 15.06 | 5.14 | 7.53 |
+| Icelandic | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 2,063 | 1,470 | 16.42 | 24.07 | 8.21 | 12.03 |
+| Russian | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 2,063 | 1,620 | 16.85 | 24.71 | 8.42 | 12.35 |
+| Ukrainian | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 2,063 | 1,670 | 16.99 | 24.92 | 8.5 | 12.46 |
+| Total | 480 | 761 | 635 | 1,600 | 1,146 | 500 | 5,122 |  |  | 120.06 | 176 | 60.03 | 87.99 |
 
-Expected: estimated input tokens and 450 output tokens per call. High: input x 1.5 and 800 output tokens. The Message Batches API halves both figures.
+Fixed tokens: measured (see D7 note). Variable tokens: estimated from character counts. Expected: 450 output tokens per call. High: fixed x 1.1, variable x 1.5, 800 output tokens. Batch is half the standard price.
 
-Twice-reviewed languages only: 2,533 calls, expected $58.02, high $93.36.
+### D7. Cost with prompt caching of the fixed part (expected unless marked high)
 
-Same without the speech arm: 2,033 calls.
+| Option | Calls | Standard, no cache $ | Standard + cache, all hits $ | Batch, no cache $ | Batch + cache, half hits $ | Batch + cache, all hits $ | Batch, no cache, high $ | Batch + cache, all hits, high $ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| A. Pilot | 628 | 14.18 | 9.25 | 7.09 | 6.18 | 4.63 | 10.38 | 7.67 |
+| B. Twice-reviewed | 2,533 | 59.51 | 39.65 | 29.76 | 26.1 | 19.83 | 43.62 | 32.7 |
+| C. All eight | 5,122 | 120.06 | 79.91 | 60.03 | 52.63 | 39.95 | 88 | 65.91 |
+
+Fixed part: 2,063 input tokens per call (95% range 2,042-2,086), from a least-squares fit of project 1's 108 measured calls on message length (R2 0.99). Cache read $0.20 and 5-minute cache write $5.00 per million tokens; batch halves both. A call that misses the cache pays the write price, so caching only pays above a 21% hit rate. Hit rate inside a batch is not guaranteed; half hits and all hits are shown as assumptions, not forecasts.
+
+Twice-reviewed languages without the speech arm: 2,033 calls.

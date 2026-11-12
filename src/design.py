@@ -156,13 +156,18 @@ emit("D5. Proposed split by source passage (no speech) and what the calibration 
 
 # ---- calls and cost -------------------------------------------------------------------------
 # Measured in mqm-judge-eval (Spanish, 108 calls, Claude Opus 5.5, effort medium, 5 neighbours each side):
-# mean 3,215 input and 371 output tokens per call. System prompt is about 1,450 of the input tokens.
+# mean 3,215 input and 371 output tokens per call.
+# Fixed part of the input (system prompt + answer schema + request overhead): least-squares fit of input tokens on
+# the characters of the per-translation message, rebuilt from local data for the same 108 calls.
+# Intercept 2,063 tokens (95% range 2,042-2,086, bootstrap over calls), slope 0.362 tokens per character, R2 0.99.
 # Other scripts cost more tokens per character; the multipliers below are planning assumptions, not measurements.
 TOK_PER_CHAR = {"cs": 0.40, "es": 0.30, "hi": 0.80, "is": 0.45, "ja": 1.0, "ru": 0.50, "uk": 0.55, "zh": 1.1}
-PRICE_IN, PRICE_OUT = 4.00, 20.00      # Claude Opus 5.5, $ per million tokens (claude-api skill, cached 2026-11-03)
-SYSTEM_TOKENS, OUT_TOKENS, OUT_HIGH = 1450, 450, 800
-# The character-based estimate gives 2,460 input tokens for Spanish; the measured mean was 3,215. Scale all languages by that ratio.
-MEASURED_OVER_ESTIMATED = 3215 / 2460
+# Claude Opus 5.5, $ per million tokens (claude-api skill, cached 2026-11-03). Cache read 0.05x input, 5-minute cache write 1.25x.
+PRICE_IN, PRICE_OUT, PRICE_READ, PRICE_WRITE = 4.00, 20.00, 0.20, 5.00
+BATCH = 0.5                             # Message Batches API: half price on every token type
+FIXED_TOKENS, OUT_TOKENS, OUT_HIGH = 2063, 450, 800
+SCAFFOLD_CHARS = 450                    # labels and headings in the per-translation message
+VAR_SCALE = 0.362 / 0.275               # measured tokens per character over the assumed English/Spanish mix
 c = pd.DataFrame(calls)
 c["Calls"] = c[["Dev", "Calibration (majors)", "Test majors", "Test clean", "Test other", "Speech arm (test only)"]].sum(axis=1)
 est = []
@@ -179,20 +184,55 @@ for lang in c["lang"]:
         near = ids[max(0, i - 5):i + 6]
         en = sum(len(src[j]) for j in near)
         tg = sum(len(tgt[r.system][j]) for j in near)
-        toks.append(SYSTEM_TOKENS + 150 + en * 0.25 + tg * TOK_PER_CHAR[lang])
-    est.append(np.mean(toks) * MEASURED_OVER_ESTIMATED)
-c["Input tokens per call (est.)"] = np.round(est, -1).astype(int)
-c["Cost, expected $"] = (c["Calls"] * (c["Input tokens per call (est.)"] * PRICE_IN + OUT_TOKENS * PRICE_OUT) / 1e6).round(2)
-c["Cost, high $"] = (c["Calls"] * (c["Input tokens per call (est.)"] * 1.5 * PRICE_IN + OUT_HIGH * PRICE_OUT) / 1e6).round(2)
-tot = {"Language": "Total", **{k: c[k].sum() for k in c.columns if k not in ("lang", "Language", "Input tokens per call (est.)")}}
-tot["Input tokens per call (est.)"] = np.nan
+        toks.append(VAR_SCALE * (SCAFFOLD_CHARS * 0.275 + en * 0.25 + tg * TOK_PER_CHAR[lang]))
+    est.append(np.mean(toks))
+c["Fixed tokens per call"] = FIXED_TOKENS
+c["Variable tokens per call (est.)"] = np.round(est, -1).astype(int)
+
+
+def cost(row, hit=None, high=False, batch=False):
+    """Dollars for one language. hit=None: no caching. hit=h: share of calls that read the fixed part from cache;
+    the rest pay the cache-write price for it. high: fixed x 1.1, variable x 1.5, 800 output tokens."""
+    fixed = row["Fixed tokens per call"] * (1.1 if high else 1)
+    var = row["Variable tokens per call (est.)"] * (1.5 if high else 1)
+    out = OUT_HIGH if high else OUT_TOKENS
+    fixed_price = PRICE_IN if hit is None else hit * PRICE_READ + (1 - hit) * PRICE_WRITE
+    return row["Calls"] * (fixed * fixed_price + var * PRICE_IN + out * PRICE_OUT) / 1e6 * (BATCH if batch else 1)
+
+
+c["Standard, expected $"] = c.apply(cost, axis=1).round(2)
+c["Standard, high $"] = c.apply(cost, axis=1, high=True).round(2)
+c["Batch, expected $"] = c.apply(cost, axis=1, batch=True).round(2)
+c["Batch, high $"] = c.apply(cost, axis=1, batch=True, high=True).round(2)
+tot = {"Language": "Total", **{k: c[k].sum() for k in c.columns if k not in ("lang", "Language", "Fixed tokens per call", "Variable tokens per call (est.)")}}
 c2 = pd.concat([c.drop(columns="lang"), pd.DataFrame([tot])], ignore_index=True)
-emit("D6. Judge calls and API cost (Claude Opus 5.5 at $4 input / $20 output per million tokens, standard API)", c2,
-     "Expected: estimated input tokens and 450 output tokens per call. High: input x 1.5 and 800 output tokens. The Message Batches API halves both figures.")
+for k in ("Fixed tokens per call", "Variable tokens per call (est.)"):
+    c2[k] = c2[k].map(lambda v: "" if pd.isna(v) else f"{int(v):,}")
+emit("D6. Judge calls and API cost without caching (Claude Opus 5.5 at $4 input / $20 output per million tokens)", c2,
+     "Fixed tokens: measured (see D7 note). Variable tokens: estimated from character counts. Expected: 450 output tokens per call. "
+     "High: fixed x 1.1, variable x 1.5, 800 output tokens. Batch is half the standard price.")
+
+OPTIONS = [("A. Pilot", ["zh"]), ("B. Twice-reviewed", TWICE), ("C. All eight", TWICE + ONCE)]
+rows = []
+for name, langs in OPTIONS:
+    a = c[c["lang"].isin(langs)]
+    s = lambda **k: a.apply(cost, axis=1, **k).sum()
+    rows.append({"Option": name, "Calls": int(a["Calls"].sum()),
+                 "Standard, no cache $": round(s(), 2),
+                 "Standard + cache, all hits $": round(s(hit=1.0), 2),
+                 "Batch, no cache $": round(s(batch=True), 2),
+                 "Batch + cache, half hits $": round(s(batch=True, hit=0.5), 2),
+                 "Batch + cache, all hits $": round(s(batch=True, hit=1.0), 2),
+                 "Batch, no cache, high $": round(s(batch=True, high=True), 2),
+                 "Batch + cache, all hits, high $": round(s(batch=True, hit=1.0, high=True), 2)})
+emit("D7. Cost with prompt caching of the fixed part (expected unless marked high)", pd.DataFrame(rows),
+     "Fixed part: 2,063 input tokens per call (95% range 2,042-2,086), from a least-squares fit of project 1's 108 measured calls "
+     "on message length (R2 0.99). Cache read $0.20 and 5-minute cache write $5.00 per million tokens; batch halves both. "
+     "A call that misses the cache pays the write price, so caching only pays above a 21% hit rate. "
+     "Hit rate inside a batch is not guaranteed; half hits and all hits are shown as assumptions, not forecasts.")
 a4 = c[c["lang"].isin(TWICE)]
-md.append(f"Twice-reviewed languages only: {a4['Calls'].sum():,} calls, expected ${a4['Cost, expected $'].sum():.2f}, high ${a4['Cost, high $'].sum():.2f}.\n")
 ns4 = a4["Calls"].sum() - a4["Speech arm (test only)"].sum()
-md.append(f"Same without the speech arm: {ns4:,} calls.\n")
+md.append(f"Twice-reviewed languages without the speech arm: {ns4:,} calls.\n")
 
 (ROOT / "out/design_tables.md").write_text("\n".join(md))
-print("\n".join(md))
+print("\n".join(md[-4:]))

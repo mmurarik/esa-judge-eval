@@ -195,30 +195,55 @@ Known mismatch, not fixed because instructions are frozen: v4 follows MQM guidel
 
 ## 9. Calls and cost
 
-Prices: Claude Opus 5.5, $4 per million input tokens, $20 per million output tokens (claude-api skill, price table cached 2026-11-03). The Message Batches API costs half and suits this job (no need for instant answers).
+Prices: Claude Opus 5.5, per million tokens: $4 input, $20 output, $0.20 cache read, $5 cache write with the 5-minute lifetime (claude-api skill, price table cached 2026-11-03). The Message Batches API halves all four and suits this job (no need for instant answers).
 
-Token basis: project 1 measured a mean of 3,215 input and 371 output tokens per call for Spanish. Other languages are estimated from character counts with assumed tokens-per-character by script, scaled to that measurement. These multipliers are assumptions; the development run (60 calls per language) measures them before the main run. "High" = input × 1.5 and 800 output tokens.
+Token basis, revised 2026-11-12:
 
-| Language | Dev | Calibration | Test majors | Test clean | Test other | Speech arm | Calls | Expected $ | High $ |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Czech | 60 | 87 | 48 | 200 | 150 | 146 | 691 | 15.12 | 24.41 |
-| Hindi | 60 | 64 | 37 | 200 | 150 | 123 | 634 | 15.90 | 25.44 |
-| Japanese | 60 | 36 | 25 | 200 | 150 | 109 | 580 | 13.18 | 21.22 |
-| Chinese | 60 | 59 | 37 | 200 | 150 | 122 | 628 | 13.82 | 22.29 |
-| Spanish (Microsoft) | 60 | 65 | 38 | 200 | 96 | 0 | 459 | 10.02 | 16.18 |
-| Icelandic | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 16.02 | 25.80 |
-| Russian | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 16.44 | 26.44 |
-| Ukrainian | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 16.59 | 26.65 |
+| Part of a call | Tokens | Basis |
+|---|---:|---|
+| Fixed: instructions, answer schema, request overhead | 2,063 (95% range 2,042-2,086) | Measured. Least-squares fit of project 1's 108 Spanish calls: input tokens against the length of the per-translation message, rebuilt from local data. R² 0.99. Range from resampling calls. Least squares because the relation is linear by construction (tokens = fixed + rate × characters) |
+| Variable: the passage, its translation, five neighbours each side | 1,290-2,110 by language | Estimated from character counts with assumed tokens-per-character by script. Only Spanish is measured (0.362 tokens per character) |
+| Output | 450 expected | Project 1 measured a mean of 371 |
 
-| Option | Languages | Calls | Standard API: expected / high | Batch API: expected / high |
-|---|---|---:|---|---|
-| A. Pilot | Chinese | 628 | $14 / $22 | $7 / $11 |
-| B. Recommended | Czech, Hindi, Japanese, Chinese | 2,533 | $58 / $93 | $29 / $47 |
-| C. Everything | All eight | 5,122 | $117 / $188 | $59 / $94 |
+The fixed part is 64% of project 1's mean input (2,063 of 3,215), not the 45% the first version of this section assumed. "High" = fixed × 1.1, variable × 1.5, 800 output tokens.
 
-**Recommendation:** option B on the Batch API with a hard cap of $50 written into the run script (it refuses to submit if the worst case would pass the cap, as in project 1). Run the development sets first (240 calls, about $3 on batch) and stop if measured tokens are more than 1.5 times the estimate.
+Without caching:
 
-Why B and not C: the four once-reviewed languages can only be described, not certified, and REPORT section 9 explains why. Icelandic is the most interesting of them for a low-resource story and could be added alone for about $8 on batch.
+| Language | Dev | Calibration | Test majors | Test clean | Test other | Speech arm | Calls | Variable tokens (est.) | Standard: expected / high | Batch: expected / high |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|
+| Czech | 60 | 87 | 48 | 200 | 150 | 146 | 691 | 1,300 | $15.51 / $22.72 | $7.76 / $11.36 |
+| Hindi | 60 | 64 | 37 | 200 | 150 | 123 | 634 | 2,110 | $16.29 / $23.93 | $8.14 / $11.96 |
+| Japanese | 60 | 36 | 25 | 200 | 150 | 109 | 580 | 1,520 | $13.53 / $19.83 | $6.77 / $9.92 |
+| Chinese | 60 | 59 | 37 | 200 | 150 | 122 | 628 | 1,330 | $14.18 / $20.76 | $7.09 / $10.38 |
+| Spanish (Microsoft) | 60 | 65 | 38 | 200 | 96 | 0 | 459 | 1,290 | $10.29 / $15.06 | $5.14 / $7.53 |
+| Icelandic | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 1,470 | $16.42 / $24.07 | $8.21 / $12.03 |
+| Russian | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 1,620 | $16.85 / $24.71 | $8.42 / $12.35 |
+| Ukrainian | 60 | 150 | 150 | 200 | 150 | 0 | 710 | 1,670 | $16.99 / $24.92 | $8.50 / $12.46 |
+
+With prompt caching of the fixed part (expected cost unless marked high):
+
+| Option | Languages | Calls | Standard, no cache | Standard + cache, all hits | Batch, no cache | Batch + cache, half hits | Batch + cache, all hits | Batch high: no cache / all hits |
+|---|---|---:|---:|---:|---:|---:|---:|---|
+| A. Pilot | Chinese | 628 | $14.18 | $9.25 | $7.09 | $6.18 | $4.63 | $10.38 / $7.67 |
+| B. Recommended | Czech, Hindi, Japanese, Chinese | 2,533 | $59.51 | $39.65 | $29.76 | $26.10 | $19.83 | $43.62 / $32.70 |
+| C. Everything | All eight | 5,122 | $120.06 | $79.91 | $60.03 | $52.63 | $39.95 | $88.00 / $65.91 |
+
+What caching can and cannot do here:
+
+| Point | Detail |
+|---|---|
+| Saving | Up to 33% on top of batch (option B: $29.76 to $19.83). After caching, output tokens are over half the bill, so there is little left to cut without changing the judge |
+| Hit rate in a batch is not guaranteed | Batch requests run in parallel, so several can start before the first one has written the cache. "Half hits" and "all hits" are assumptions, not forecasts |
+| A miss costs more than no caching | A call that misses pays the write price (1.25 × input) for the fixed part. Caching pays only above a 21% hit rate |
+| One cache per language | The instructions differ by language and locale wording, so each language writes its own entry |
+| Not yet verified | That the answer schema's tokens sit inside the cached part. The 2,063 includes them. The development run reads this off the usage fields |
+| Does not change the judge | Same model, effort, instructions and answers; only billing changes |
+
+Batch beats the standard API even when the standard API gets every cache hit ($29.76 against $39.65 for option B), so batch stays the base choice and caching is an add-on.
+
+**Recommendation:** option B on the Batch API with caching switched on, and the hard cap kept at $50 in the run script (it refuses to submit if the worst case would pass the cap, as in project 1). The cap is set from the no-cache high figure ($43.62), so the run stays inside it if caching fails entirely. Run the development sets first (240 calls, about $3 on batch): they measure the variable tokens per language and the cache hit rate. Stop if measured tokens are more than 1.5 times the estimate.
+
+Why B and not C: the four once-reviewed languages can only be described, not certified, and REPORT section 9 explains why. Icelandic is the most interesting of them for a low-resource story and could be added alone for about $8 on batch without caching.
 
 ## 10. What a result will and will not mean
 
@@ -236,4 +261,4 @@ Why B and not C: the four once-reviewed languages can only be described, not cer
 | 2 | Speech | Separate test-only arm, outside the guarantee |
 | 3 | Languages | Option B: the four twice-reviewed languages |
 | 4 | Locale wording | Table in section 8 |
-| 5 | Spend | Batch API, hard cap $50 |
+| 5 | Spend | Batch API with prompt caching, hard cap $50 |
