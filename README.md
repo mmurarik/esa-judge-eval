@@ -34,7 +34,7 @@ Counted from the public files, not taken from the paper. Detail and method are i
 | 1 | Human reviewers barely agree with each other | Krippendorff's alpha on three groups (no error / minor only / major), two different reviewers: Czech 0.30, Hindi 0.27, Japanese 0.17, Chinese 0.18. The usual floor for usable labels is 0.667 (convention, Krippendorff 2004) |
 | 2 | A second reviewer often marks nothing where the first marked a major error | Czech 34%, Hindi 36%, Japanese 59%, Chinese 57%. A judge scored against a single review inherits this noise |
 | 3 | Only four languages were reviewed twice, and translations where both reviewers marked a major error are scarce | Without speech: Czech 135, Hindi 101, Chinese 96, Japanese 61. This caps how strong a guarantee the study can give |
-| 4 | Spanish labels depend on the vendor | One vendor's reviewers flagged 15% of translations, the other's 66% (its two reviewers: 83% and 44%) |
+| 4 | Spanish labels depend on the vendor | Microsoft's 12 reviewers flagged 15% of translations; Toloka's 2 reviewers flagged 66% (83% and 44% individually). The split is by passage, so the two vendors never reviewed the same translations |
 | 5 | Speech passages carry about twice the major-error rate of other text | True in all eight languages. Reviewers saw the video; a judge would see only the transcript |
 
 Where the files differ from the paper: 634 source passages per language (paper: 649); Czech 19 reviewers (paper: 20); Chinese 14 (paper: 12); Japanese and Chinese have 2.0 reviews per translation (paper: 1.5), Czech and Hindi about 1.47 (paper: 1.3).
